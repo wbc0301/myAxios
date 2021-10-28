@@ -1,4 +1,4 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 function encode(val: string): string {
   return encodeURIComponent(val) // 对于字符 @ : $ , [ ]  我们是允许出现在 url 中的，不希望被 encode。
@@ -35,7 +35,7 @@ export function bulidURL(url: string, params?: any) {
     values.forEach(val => {
       if (isDate(val)) {
         val = val.toISOString() // 3./base/get?date=2019-04-01T05:55:39.030Z
-      } else if (isObject(val)) {
+      } else if (isPlainObject(val)) {
         val = JSON.stringify(val) // 4.处理对象 JSON.stringify
       }
       parts.push(`${encode(key)}=${encode(val)}`)
