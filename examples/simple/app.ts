@@ -13,6 +13,11 @@ import axios from '../../src/index'
 // axios({ method: 'post', url: '/base/post', data: { a: 1, b: 2 } })
 // axios({ method: 'post', url: '/base/buffer', data: new Int32Array([21, 31]) })
 
-axios({ method: 'post', url: '/base/post', data: { a: 1, b: 2 } })
-axios({ method: 'post', url: '/base/post', headers: { 'content-type': 'application/json;charset=UTF-8' }, data: { a: 1, b: 2 } })
-axios({ method: 'post', url: '/base/post', data: new URLSearchParams('q=URLUtils.searchParams&topic=api') })
+// // 处理header
+// axios({ method: 'post', url: '/base/post', data: { a: 1, b: 2 } })
+// axios({ method: 'post', url: '/base/post', headers: { 'content-type': 'application/json;charset=UTF-8' }, data: { a: 1, b: 2 } })
+// axios({ method: 'post', url: '/base/post', data: new URLSearchParams('q=URLUtils.searchParams&topic=api') })
+
+// 获取响应数据
+axios({ method: 'post', url: '/base/post', data: { a: 1, b: 2 } }).then(res => { console.log(res) })
+axios({ method: 'post', url: '/base/post', responseType: 'json', data: { a: 3, b: 4 } }).then(res => { console.log(res) })
