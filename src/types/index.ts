@@ -28,6 +28,10 @@ export interface AxiosError {
 }
 
 export interface Axios {
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
   get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
@@ -43,7 +47,15 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
-export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {
+export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> { }
 
+
+
+// 拦截器管理对象  定义了泛型接口，因为对于 resolve 函数的参数，请求拦截器和响应拦截器是不同的。
+export interface AxiosInterceptorManager<T> {
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
+  eject(id: number): void
 }
+export interface ResolvedFn<T = any> { (val: T): T | Promise<T> }
+export interface RejectedFn { (error: any): any }
 
