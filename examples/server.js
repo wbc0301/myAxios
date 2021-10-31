@@ -26,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 const router = express.Router()
 
+// 基础功能实现接口
 router.get('/simple/get', function (req, res) { res.json({ msg: `hello world` }) })
 router.get('/base/get', function (req, res) { res.json(req.query) })
 router.post('/base/post', function (req, res) { res.json(req.body) })
@@ -36,6 +37,19 @@ router.post('/base/buffer', function (req, res) {
     let buf = Buffer.concat(msg)
     res.json(buf.toJSON())
   })
+})
+
+// 错误处理接口
+router.get('/error/get', function (req, res) {
+  if (Math.random() > 0.5) {
+    res.json({ msg: `50%的概率成......` })
+  } else {
+    res.status(500)
+    res.end()
+  }
+})
+router.get('/error/timeout', function (req, res) {
+  setTimeout(() => { res.json({ msg: `hello world` }) }, 3000) // 测试请求超时，3s后返回 但客户端设置的timeout：2000
 })
 
 
