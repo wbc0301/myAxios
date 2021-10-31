@@ -12,7 +12,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     responseType && (request.responseType = responseType) // 添加 responseType
     timeout && (request.timeout = timeout) // 添加超时时间
 
-    request.open(method, url, true)
+    request.open(method, url!, true)
 
 
     Object.keys(headers).forEach((name) => {
@@ -43,13 +43,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (request.status >= 200 && request.status < 300) { // 处理状态码非200的错误
         resolve(response)
       } else {
-        reject(createError(
-          `Request failed with status code ${request.status}......`,
-          config,
-          null,
-          request,
-          response
-        ))
+        reject(createError(`Request failed with status code ${request.status}......`, config, null, request, response))
       }
     }
     request.onerror = function () { // 监听网络错误
