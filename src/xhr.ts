@@ -1,4 +1,5 @@
-import { rejects } from 'assert'
+
+import { createError } from './helper/error'
 import { parseHeaders } from './helper/header'
 import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from './types/index'
 
@@ -26,7 +27,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (request.readyState !== 4) {
         return
       }
-      if(request.status === 0) { // 网络超时 断网时 status为0
+      if (request.status === 0) { // 网络超时 断网时 status为0
         return
       }
       const responseHeaders = parseHeaders(request.getAllResponseHeaders()) // parseHeaders把字符串的header解析成对象
@@ -39,17 +40,23 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         config,
         request
       }
-      if (request.status >= 200 && request.status < 300) {// 处理状态码非200的错误
+      if (request.status >= 200 && request.status < 300) { // 处理状态码非200的错误
         resolve(response)
       } else {
-        reject(new Error(`Request failed with status code ${request.status}......`))
+        reject(createError(
+          `Request failed with status code ${request.status}......`,
+          config,
+          null,
+          request,
+          response
+        ))
       }
     }
     request.onerror = function () { // 监听网络错误
-      reject(new Error('Network Error......'))
+      reject(createError('Network Error......', config, null, request))
     }
     request.ontimeout = function () { // 监听超时错误
-      reject(new Error(`Timeout of ${timeout} ms exceeded......`))
+      reject(createError(`Timeout of ${config.timeout} ms exceeded.....1.`, config, 'ECONNABORTED', request))
     }
 
 
