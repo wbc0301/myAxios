@@ -45,6 +45,9 @@ export interface Axios {
 export interface AxiosInstance extends Axios {
   <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
 }
 
 export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> { }
@@ -59,3 +62,39 @@ export interface AxiosInterceptorManager<T> {
 export interface ResolvedFn<T = any> { (val: T): T | Promise<T> }
 export interface RejectedFn { (error: any): any }
 
+
+// 取消功能相关接口定义
+export interface AxiosRequestConfig {
+  cancelToken?: CancelToken
+}
+export interface CancelToken {
+  promise: Promise<Cancel>
+  reason?: Cancel
+  throwIfRequested(): void
+}
+export interface Canceler {
+  (message?: string): void
+}
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+export interface CancelTokenStatic {
+  new(executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
+}
+export interface Cancel {
+  message?: string
+}
+export interface CancelStatic {
+  new(message?: string): Cancel
+}
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
+}
