@@ -22,7 +22,7 @@ export default class Axios {
   }
 
   request(url: any, config?: any): AxiosPromise {
-    if (typeof url === 'string') { // 函数重载
+    if (typeof url === 'string') { // 函数重载(可以理解为：一个函数根据传入参数的不同当做不同的函数使用)
       if (!config) {
         config = {}
       }
